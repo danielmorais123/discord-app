@@ -1,14 +1,24 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
 import Channel from "./Channel";
 import ChannelTab from "./ChannelTab";
 import Activity from "./Activity";
 import ProfileTab from "./ProfileTab";
 import OptionsServerName from "./OptionsServerName";
-export default function ChannelsSide({ server }: any) {
+import { Server } from "@/app/types/typing";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+export default async function ChannelsSide({ server }: { server: Server }) {
+  const supabase = createServerComponentClient({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) return redirect("/login");
+  const user = await supabase
+    .from("user")
+    .select("*")
+    .eq("email", session?.user?.email);
+  // console.log({ user });
   const serverName =
     server?.name?.length < 18
       ? server?.name
@@ -26,16 +36,23 @@ export default function ChannelsSide({ server }: any) {
         <OptionsServerName />
       </div>
       <hr className="border-zinc-700 mt-4" />
-      <div className="mt-2 gap-2 flex flex-col mx-2">
+      {/* <div className="mt-2 gap-2 flex flex-col mx-2">
         <Channel />
-      </div>
+      </div> */}
       <div className="mx-2 mt-2  flex-grow">
-        <ChannelTab title="Text channels" channels={server.textChannels} />
-        <ChannelTab title="Voice channels" channels={server.voiceChannels} />
+        <ChannelTab
+          title="Text channels"
+          channels={server?.channels?.filter((x) => x.isText)}
+        />
+        <ChannelTab
+          title="Voice channels"
+          channels={server?.channels?.filter((x) => !x.isText)}
+        />
       </div>
       <div>
         <Activity activity={activity} />
-        <ProfileTab />
+        {/* @ts-ignore */}
+        <ProfileTab user={user.data[0]} />
       </div>
     </div>
   );

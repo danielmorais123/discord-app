@@ -10,7 +10,7 @@ export default function Activity({ activity }: any) {
       </div>
       <FontAwesomeIcon
         icon={faDesktop}
-        className="cursor-pointer text-zinc-500"
+        className="cursor-pointer text-zinc-500 hover:bg-zinc-700 p-1 transition rounded-md"
       />
     </div>
   );

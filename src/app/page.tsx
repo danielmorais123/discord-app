@@ -11,19 +11,21 @@ export default function Home() {
   return (
     <div className="bg-[#1e1f22] h-screen text-zinc-200 flex flex-col">
       <div className="px-3 pt-0.5 flex items-center justify-between">
-        <p className={`text-zinc-400 ${anton.className} text-lg `}>Discord</p>
+        <p className={`text-zinc-400 ${anton.className} font-bold text-md `}>
+          Discord
+        </p>
         <div className="gap-1 flex">
           <FontAwesomeIcon
             icon={faMinus}
-            className="w-3 hover:bg-zinc-200 hover:text-zinc-600 px-1 mx-1 transition "
+            className="w-3 hover:bg-zinc-200 hover:text-zinc-600 px-1 mx-1 transition cursor-pointer"
           />
           <FontAwesomeIcon
             icon={faWindowMaximize}
-            className="w-3 hover:bg-zinc-200 hover:text-zinc-600 px-1 mx-1 transition "
+            className="w-3 hover:bg-zinc-200 hover:text-zinc-600 px-1 mx-1 transition cursor-pointer"
           />
           <FontAwesomeIcon
             icon={faClose}
-            className="w-3 hover:bg-red-400 hover:text-zinc-100 px-1 ml-1 transition "
+            className="w-3 hover:bg-red-400 hover:text-zinc-100 px-1 ml-1 transition cursor-pointer"
           />
         </div>
       </div>

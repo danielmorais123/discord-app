@@ -10,6 +10,7 @@ import {
   faFolderPlus,
   faGear,
   faGem,
+  faGhost,
   faPen,
   faSquare,
   faUserPlus,
@@ -34,7 +35,7 @@ export default function OptionsServerName() {
             <FontAwesomeIcon icon={faGem} className="absolute right-2" />
           </MenuItem>
           <hr className="!border-zinc-600" />
-          <MenuItem className="!bg-zinc-800 hover:!bg-zinc-700 text-sm relative">
+          <MenuItem className="!bg-zinc-800 !text-[#7289da] hover:!bg-[#7289da] hover:!text-white text-sm relative">
             Invite People
             <FontAwesomeIcon icon={faUserPlus} className="absolute right-1" />
           </MenuItem>
@@ -59,7 +60,7 @@ export default function OptionsServerName() {
           </MenuItem>
           <MenuItem className="!bg-zinc-800 hover:!bg-zinc-700 text-sm relative">
             App Directory
-            <FontAwesomeIcon icon={faCirclePlus} className="absolute right-2" />
+            <FontAwesomeIcon icon={faGhost} className="absolute right-2" />
           </MenuItem>
           <hr className="!border-zinc-600" />
           <MenuItem className="!bg-zinc-800 hover:!bg-zinc-700 text-sm relative">
@@ -81,7 +82,7 @@ export default function OptionsServerName() {
             <FontAwesomeIcon icon={faSquare} className="absolute right-2" />
           </MenuItem>
           <hr className="!border-zinc-600" />
-          <MenuItem className="!bg-zinc-800 hover:!bg-zinc-700 text-sm relative">
+          <MenuItem className="!bg-zinc-800 hover:!bg-red-500 hover:!text-white text-sm relative !text-red-500">
             Report Raid
             <FontAwesomeIcon icon={faFlag} className="absolute right-2" />
           </MenuItem>
