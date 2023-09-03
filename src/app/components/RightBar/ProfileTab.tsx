@@ -1,9 +1,11 @@
 import { User } from "@/app/types/typing";
 import {
+  faBan,
   faGear,
   faHeadphones,
   faHeadset,
   faMicrophone,
+  faSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -27,6 +29,7 @@ export default function ProfileTab({ user }: { user: User }) {
           icon={faMicrophone}
           className="cursor-pointer hover:bg-zinc-700 p-1 rounded-md transition"
         />
+
         <FontAwesomeIcon
           icon={faHeadphones}
           className="cursor-pointer hover:bg-zinc-700 p-1 rounded-md transition"

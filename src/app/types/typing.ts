@@ -6,6 +6,14 @@ export interface Message {
     channelId: number;
     user?: User
 }
+export interface Friend {
+    user_id: User | number;
+    friend_id: User | number;
+    created_at: Date | string | any;
+    confirmed: boolean;
+
+
+}
 
 export interface Server {
     id: number;
@@ -24,6 +32,7 @@ export interface Channel {
     name: string;
     isText: boolean;
     message: Message[];
+    isPublic?: boolean;
 
 }
 export interface User {

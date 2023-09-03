@@ -13,11 +13,14 @@ export default function MessagesSide({
   server,
   channel,
   user,
+  showUsersInChannel,
 }: {
   server: Server;
   channel: Channel;
   user: User;
+  showUsersInChannel: boolean;
 }) {
+  console.log(channel);
   return (
     <div className="bg-[#313338] flex-grow flex flex-col">
       <div className="px-4 mt-4 flex items-center justify-between">
@@ -52,8 +55,8 @@ export default function MessagesSide({
       <hr className="border-zinc-700 mt-4" />
       <ChannelMessages
         chatName={channel?.name}
-        channelId={channel.id}
-        messages={channel.message}
+        channelId={channel?.id}
+        messages={channel?.message}
         user={user}
       />
     </div>

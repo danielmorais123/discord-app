@@ -5,8 +5,9 @@ import { sendMessage } from "@/app/actions";
 import { Message, User } from "@/app/types/typing";
 import { faCircleCheck, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ChannelMessages({
   chatName,
@@ -19,21 +20,66 @@ export default function ChannelMessages({
   messages: Message[];
   user: User;
 }) {
-  const [msgs, setMsgs] = useState<Message[]>([]);
+  console.log(messages);
+  const [msgs, setMsgs] = useState<Message[]>(messages);
+  const divRef = useRef(null);
+
+  const scrollToLastMessage = () => {
+    /* @ts-ignore */
+    divRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    const msgsOrderAsc = messages.sort(
+    scrollToLastMessage();
+  }, [msgs]);
+
+  const supabase = createClientComponentClient();
+  useEffect(() => {
+    const msgsOrderAsc = messages?.sort(
       (a, b) =>
         new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
     setMsgs(msgsOrderAsc);
-  }, [messages]);
+    divRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, channelId]);
+
+  useEffect(() => {
+    console.log("USE EFFECT");
+    const channelB = supabase
+      .channel("message")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "message",
+        },
+        (payload) => {
+          supabase
+            .from("message")
+            .select("id, userId, content, created_at, user(*), channelId")
+            .eq("channelId", channelId)
+            .then((value) => {
+              console.log(value);
+              /* @ts-ignore */
+              setMsgs(value.data);
+            });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channelB);
+    };
+  }, [channelId]);
 
   let userLastMessage = "";
   return (
     <div className="flex-grow flex flex-col  relative">
-      <div className="flex-grow flex flex-col">
-        {msgs.map((message, idx) => {
+      <div className="flex-grow flex flex-col ml-2 max-h-[81vh] overflow-y-auto scrollbar-thin">
+        {msgs?.map((message, idx) => {
           if (message?.user?.fullName !== userLastMessage) {
             /* @ts-ignore */
 
@@ -71,19 +117,26 @@ export default function ChannelMessages({
             </div>
           );
         })}
+        <div ref={divRef} />
       </div>
 
       <div className="px-4 py-5 relative flex">
         <form
-          action={sendMessage}
+          action={(formDate) => {
+            sendMessage(formDate);
+            /* @ts-ignore */
+            document.getElementById("message").value = "";
+          }}
           className="relative w-full bg-[#383a40] flex items-center rounded-xl"
         >
           <FontAwesomeIcon icon={faCirclePlus} className="mx-4 h-6" />
           <input
             type="text"
+            disabled={!chatName}
             className=" w-full p-3 bg-transparent outline-none text-sm"
             placeholder={`Message ${chatName}`}
             name="message"
+            id="message"
           />
           <input name="channelId" value={channelId} className="hidden" />
           <input name="userId" value={user.id} className="hidden" />
